@@ -8,7 +8,8 @@ This tool is designed to work with a `lookup.csv` file, which acts as a master d
 
 ## Demo
 
-<video src="demo.mov" controls width="700"></video>
+![Demo animation](demo.gif)
+
 
 ---
 

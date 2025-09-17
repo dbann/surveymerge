@@ -29,4 +29,4 @@ This tool is designed to work with a `lookup.csv` file, which acts as a master d
 
 **Note on Data Structure:**  
 The generated scripts assume your datasets are organized into subfolders (e.g., by age, wave, or topic), as specified in your `lookup.csv` file.  
-See [CLS Data Documentation](https://cls-data.github.io/docs/intro.html).
+See [CLS Data Handling Documentation](https://cls-data.github.io/docs/intro.html).

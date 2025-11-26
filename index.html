@@ -870,7 +870,7 @@
         <div class="action-buttons">
             <div class="config-group">
                 <label class="config-label" for="idVarInput">ID Variable</label>
-                <input type="text" class="config-input" id="idVarInput" value="BCSID" style="width: 120px;">
+                <input type="text" class="config-input" id="idVarInput" value="bcsid" style="width: 120px;">
             </div>
             <div class="config-group">
                 <label class="config-label" for="basePathInput">Base Path (optional)</label>
@@ -1554,11 +1554,11 @@
 
             function generateRCode(groups, idVar, basePath) {
                 const date = new Date().toISOString().split('T')[0];
-                const idVarLower = idVar.toLowerCase();
+                // Remove all conversion to lowercase for idVar
                 return `# Survey Variable Selection - R Code
 # Generated: ${date}
 # Variables: ${selectedVariables.size} from ${groups.length} datasets
-# ID Variable: ${idVar} (will be standardized to lowercase: ${idVarLower})
+# ID Variable: ${idVar}
 
 library(tidyverse)
 library(haven)
@@ -1568,28 +1568,17 @@ library(labelled)
 base_path <- "${basePath}"
 id_var <- "${idVar}"
 
-# Helper function to standardize ID variable name to lowercase
-standardize_id <- function(df, id_var) {
-  # Find columns matching id_var (case-insensitive)
-  id_cols <- names(df)[tolower(names(df)) == tolower(id_var)];
-  if (length(id_cols) > 0 && id_cols != "${idVarLower}") {
-    names(df)[names(df) == id_cols] <- "${idVarLower}";
-  }
-  return(df);
-}
-
 # Load and merge datasets
 datasets <- list(
 ${groups.map((g, i) => `  # [${i + 1}] ${g.data} (${g.variables.length} variables)
   {
     df <- read_dta(file.path(base_path, "${g.folder}", "${g.data}"))
-    df <- standardize_id(df, id_var)
-    select(df, all_of(c("${idVarLower}", ${g.variables.map(v => `"${v}"`).join(', ')})))
+    select(df, all_of(c("${idVar}", ${g.variables.map(v => `"${v}"`).join(', ')})))
   }`).join(',\n')}
 )
 
 # Merge all datasets
-final_data <- reduce(datasets, left_join, by = "${idVarLower}")
+final_data <- reduce(datasets, left_join, by = "${idVar}")
 
 # Summary
 cat("\\nMerge complete!\\n")
@@ -1605,12 +1594,11 @@ look_for(final_data)
 
             function generateStataCode(groups, idVar, basePath) {
                 const date = new Date().toISOString().split('T')[0];
-                const idVarLower = idVar.toLowerCase();
-                const idVarUpper = idVar.toUpperCase();
+                // Remove all conversion to lowercase for idVar
                 let code = `* Survey Variable Selection - Stata Code
 * Generated: ${date}
 * Variables: ${selectedVariables.size} from ${groups.length} datasets
-* ID Variable: ${idVar} (will be standardized to lowercase: ${idVarLower})
+* ID Variable: ${idVar}
 
 clear all
 set more off
@@ -1618,33 +1606,21 @@ set more off
 * Configuration
 global base_path "${basePath}"
 
-* Helper program to standardize ID variable name
-capture program drop standardize_id
-program define standardize_id
-    * Try to rename various case variants to lowercase
-    capture rename ${idVarUpper} ${idVarLower}
-    capture rename ${idVar} ${idVarLower}
-    * Add other common variants if needed
-    capture rename ${idVar.charAt(0).toUpperCase() + idVar.slice(1).toLowerCase()} ${idVarLower}
-end
-
 * Load first dataset
 `;
                 groups.forEach((g, i) => {
                     if (i === 0) {
                         code += `use "\$base_path/${g.folder}/${g.data}", clear\n`;
-                        code += `standardize_id\n`;
-                        code += `keep ${idVarLower} ${g.variables.join(' ')}\n\n`;
+                        code += `keep ${idVar} ${g.variables.join(' ')}\n\n`;
                     } else {
                         code += `* Merge ${g.data}\n`;
                         code += `preserve\n`;
                         code += `use "\$base_path/${g.folder}/${g.data}", clear\n`;
-                        code += `standardize_id\n`;
-                        code += `keep ${idVarLower} ${g.variables.join(' ')}\n`;
+                        code += `keep ${idVar} ${g.variables.join(' ')}\n`;
                         code += `tempfile temp${i}\n`;
                         code += `save \`temp${i}'\n`;
                         code += `restore\n`;
-                        code += `merge 1:1 ${idVarLower} using \`temp${i}'\n`;
+                        code += `merge 1:1 ${idVar} using \`temp${i}'\n`;
                         code += `drop _merge\n\n`;
                     }
                 });

@@ -1554,10 +1554,11 @@
 
             function generateRCode(groups, idVar, basePath) {
                 const date = new Date().toISOString().split('T')[0];
+                const idVarLower = idVar.toLowerCase();
                 return `# Survey Variable Selection - R Code
 # Generated: ${date}
 # Variables: ${selectedVariables.size} from ${groups.length} datasets
-# ID Variable: ${idVar}
+# ID Variable: ${idVar} (will be standardized to lowercase: ${idVarLower})
 
 library(tidyverse)
 library(haven)
@@ -1567,15 +1568,28 @@ library(labelled)
 base_path <- "${basePath}"
 id_var <- "${idVar}"
 
+# Helper function to standardize ID variable name to lowercase
+standardize_id <- function(df, id_var) {
+  # Find columns matching id_var (case-insensitive)
+  id_cols <- names(df)[tolower(names(df)) == tolower(id_var)];
+  if (length(id_cols) > 0 && id_cols != "${idVarLower}") {
+    names(df)[names(df) == id_cols] <- "${idVarLower}";
+  }
+  return(df);
+}
+
 # Load and merge datasets
 datasets <- list(
 ${groups.map((g, i) => `  # [${i + 1}] ${g.data} (${g.variables.length} variables)
-  read_dta(file.path(base_path, "${g.folder}", "${g.data}")) %>%
-    select(all_of(c(id_var, ${g.variables.map(v => `"${v}"`).join(', ')})))`).join(',\n')}
+  {
+    df <- read_dta(file.path(base_path, "${g.folder}", "${g.data}"))
+    df <- standardize_id(df, id_var)
+    select(df, all_of(c("${idVarLower}", ${g.variables.map(v => `"${v}"`).join(', ')})))
+  }`).join(',\n')}
 )
 
 # Merge all datasets
-final_data <- reduce(datasets, left_join, by = id_var)
+final_data <- reduce(datasets, left_join, by = "${idVarLower}")
 
 # Summary
 cat("\\nMerge complete!\\n")

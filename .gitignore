@@ -1,3 +1,7 @@
 *.dta 
 
+manage_data.py
+
+manage_data.ipynb
+
 internal_notes.txt

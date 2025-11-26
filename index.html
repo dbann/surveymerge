@@ -1583,10 +1583,11 @@ look_for(final_data)
             function generateStataCode(groups, idVar, basePath) {
                 const date = new Date().toISOString().split('T')[0];
                 const idVarLower = idVar.toLowerCase();
+                const idVarUpper = idVar.toUpperCase();
                 let code = `* Survey Variable Selection - Stata Code
 * Generated: ${date}
 * Variables: ${selectedVariables.size} from ${groups.length} datasets
-* ID Variable: ${idVar} (will be converted to lowercase: ${idVarLower})
+* ID Variable: ${idVar} (will be standardized to lowercase: ${idVarLower})
 
 clear all
 set more off
@@ -1594,24 +1595,33 @@ set more off
 * Configuration
 global base_path "${basePath}"
 
+* Helper program to standardize ID variable name
+capture program drop standardize_id
+program define standardize_id
+    * Try to rename various case variants to lowercase
+    capture rename ${idVarUpper} ${idVarLower}
+    capture rename ${idVar} ${idVarLower}
+    * Add other common variants if needed
+    capture rename ${idVar.charAt(0).toUpperCase() + idVar.slice(1).toLowerCase()} ${idVarLower}
+end
+
 * Load first dataset
 `;
                 groups.forEach((g, i) => {
                     if (i === 0) {
-                        code += `use ${idVar} ${g.variables.join(' ')} using "\$base_path/${g.folder}/${g.data}", clear\n`;
-                        code += `* Rename ID variable to lowercase for consistent merging\n`;
-                        code += `capture rename ${idVar} ${idVarLower}\n`;
-                        code += `capture rename ${idVar.toUpperCase()} ${idVarLower}\n\n`;
+                        code += `use "\$base_path/${g.folder}/${g.data}", clear\n`;
+                        code += `standardize_id\n`;
+                        code += `keep ${idVarLower} ${g.variables.join(' ')}\n\n`;
                     } else {
                         code += `* Merge ${g.data}\n`;
                         code += `preserve\n`;
-                        code += `use ${idVar} ${g.variables.join(' ')} using "\$base_path/${g.folder}/${g.data}", clear\n`;
-                        code += `capture rename ${idVar} ${idVarLower}\n`;
-                        code += `capture rename ${idVar.toUpperCase()} ${idVarLower}\n`;
+                        code += `use "\$base_path/${g.folder}/${g.data}", clear\n`;
+                        code += `standardize_id\n`;
+                        code += `keep ${idVarLower} ${g.variables.join(' ')}\n`;
                         code += `tempfile temp${i}\n`;
                         code += `save \`temp${i}'\n`;
                         code += `restore\n`;
-                        code += `merge 1:1 ${idVarLower} using \`temp${i}', keepusing(${g.variables.join(' ')})\n`;
+                        code += `merge 1:1 ${idVarLower} using \`temp${i}'\n`;
                         code += `drop _merge\n\n`;
                     }
                 });

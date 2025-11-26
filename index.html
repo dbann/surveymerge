@@ -1582,30 +1582,41 @@ look_for(final_data)
 
             function generateStataCode(groups, idVar, basePath) {
                 const date = new Date().toISOString().split('T')[0];
+                const idVarLower = idVar.toLowerCase();
                 let code = `* Survey Variable Selection - Stata Code
 * Generated: ${date}
 * Variables: ${selectedVariables.size} from ${groups.length} datasets
-* ID Variable: ${idVar}
+* ID Variable: ${idVar} (will be converted to lowercase: ${idVarLower})
 
 clear all
 set more off
 
 * Configuration
 global base_path "${basePath}"
-local id_var "${idVar}"
 
 * Load first dataset
 `;
                 groups.forEach((g, i) => {
                     if (i === 0) {
-                        code += 'use `id_var\' ' + g.variables.join(' ') + ' using "$base_path/' + g.folder + '/' + g.data + '", clear\n';
+                        code += `use ${idVar} ${g.variables.join(' ')} using "\$base_path/${g.folder}/${g.data}", clear\n`;
+                        code += `* Rename ID variable to lowercase for consistent merging\n`;
+                        code += `capture rename ${idVar} ${idVarLower}\n`;
+                        code += `capture rename ${idVar.toUpperCase()} ${idVarLower}\n\n`;
                     } else {
-                        code += '\n* Merge ' + g.data + '\nmerge 1:1 `id_var\' using "$base_path/' + g.folder + '/' + g.data + '", ///\n    keepusing(' + g.variables.join(' ') + ')\ndrop _merge\n';
+                        code += `* Merge ${g.data}\n`;
+                        code += `preserve\n`;
+                        code += `use ${idVar} ${g.variables.join(' ')} using "\$base_path/${g.folder}/${g.data}", clear\n`;
+                        code += `capture rename ${idVar} ${idVarLower}\n`;
+                        code += `capture rename ${idVar.toUpperCase()} ${idVarLower}\n`;
+                        code += `tempfile temp${i}\n`;
+                        code += `save \`temp${i}'\n`;
+                        code += `restore\n`;
+                        code += `merge 1:1 ${idVarLower} using \`temp${i}', keepusing(${g.variables.join(' ')})\n`;
+                        code += `drop _merge\n\n`;
                     }
                 });
 
-                code += `
-* Summary
+                code += `* Summary
 describe
 summarize
 

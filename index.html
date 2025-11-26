@@ -789,9 +789,6 @@
             <button class="quick-btn" onclick="selectAllVisible()">Select All Visible</button>
             <button class="quick-btn" onclick="deselectAll()">Deselect All</button>
             <div class="separator"></div>
-            <button class="quick-btn" onclick="showPresets()">📋 Load Preset</button>
-            <button class="quick-btn" onclick="savePreset()">💾 Save Selection</button>
-            <div class="separator"></div>
             <button class="quick-btn" onclick="toggleCompactView()">🔄 Toggle View</button>
         </div>
 
@@ -886,9 +883,6 @@
             <button class="btn btn-secondary" id="generatePythonBtn" disabled>
                 <span>Generate Python Code</span>
             </button>
-            <button class="btn btn-success" id="exportBtn" disabled>
-                <span>Export Selection</span>
-            </button>
         </div>
     </div>
 
@@ -907,19 +901,6 @@
                 <pre class="code-output" id="codeOutput">
                     <span class="code-lang-badge" id="codeLang">R</span>
                 </pre>
-            </div>
-        </div>
-    </div>
-
-    <!-- Presets Modal -->
-    <div id="presetModal">
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-header">
-                <h2>Variable Selection Presets</h2>
-                <span class="close" onclick="closePresetModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="preset-list" id="presetList"></div>
             </div>
         </div>
     </div>
@@ -993,16 +974,13 @@
                 generateRBtn: $id('generateRBtn'),
                 generateStataBtn: $id('generateStataBtn'),
                 generatePythonBtn: $id('generatePythonBtn'),
-                exportBtn: $id('exportBtn'),
                 modal: $id('codeModal'),
-                presetModal: $id('presetModal'),
                 dragOverlay: $id('drag-overlay')
             };
 
             // Initialize
             function init() {
                 setupEventListeners();
-                loadPresets();
                 checkURLParams();
 
                 // Auto-load data if configured
@@ -1105,7 +1083,6 @@
                 elements.generateRBtn.addEventListener('click', () => generateCode('R'));
                 elements.generateStataBtn.addEventListener('click', () => generateCode('Stata'));
                 elements.generatePythonBtn.addEventListener('click', () => generateCode('Python'));
-                elements.exportBtn.addEventListener('click', exportSelection);
 
                 // Modal
                 $id('modalCloseBtn').addEventListener('click', closeModal);
@@ -1113,14 +1090,12 @@
                 $id('downloadBtn').addEventListener('click', downloadCode);
                 window.addEventListener('click', (e) => {
                     if (e.target === elements.modal) closeModal();
-                    if (e.target === elements.presetModal) closePresetModal();
                 });
 
                 // Keyboard shortcuts
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') {
                         closeModal();
-                        closePresetModal();
                     }
                     if (dataTable) {
                         if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
@@ -1430,7 +1405,7 @@
 
             function enableActionButtons() {
                 [elements.generateRBtn, elements.generateStataBtn,
-                elements.generatePythonBtn, elements.exportBtn].forEach(btn => {
+                elements.generatePythonBtn].forEach(btn => {
                     btn.disabled = false;
                 });
             }
@@ -1717,26 +1692,6 @@ print(final_data.info())
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }
-
-            function exportSelection() {
-                if (selectedVariables.size === 0) {
-                    alert('Please select at least one variable');
-                    return;
-                }
-
-                const data = Array.from(selectedVariables.values());
-                const csv = Papa.unparse(data);
-
-                const blob = new Blob([csv], { type: 'text/csv' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `selected_variables_${new Date().toISOString().split('T')[0]}.csv`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);

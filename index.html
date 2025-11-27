@@ -48,83 +48,26 @@
             font-size: 14px;
         }
 
-        .upload-section {
-            padding: 30px;
-            background: #fafafa;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .file-input-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-
-        .file-input {
-            position: absolute;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-
-        .file-label {
-            display: inline-block;
-            padding: 12px 24px;
-            background: #667eea;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .file-label:hover {
-            background: #5a67d8;
-            transform: translateY(-1px);
-        }
-
-        .file-info {
-            color: #666;
-            flex: 1;
-        }
-
-        .progress-bar {
-            width: 200px;
-            height: 4px;
-            background: #e5e7eb;
-            border-radius: 2px;
-            overflow: hidden;
-            display: none;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: #667eea;
-            transition: width 0.3s;
-        }
-
-        /* Quick Actions Toolbar */
+        /* Quick Actions Toolbar - More compact */
         .quick-actions {
-            padding: 10px 20px;
+            padding: 8px 20px;
             background: #f9fafb;
             border-bottom: 1px solid #e5e7eb;
             display: none;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .quick-btn {
-            padding: 6px 12px;
+            padding: 5px 10px;
             background: white;
             border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 12px;
+            border-radius: 4px;
+            font-size: 11px;
             cursor: pointer;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .quick-btn:hover {
@@ -132,11 +75,11 @@
             border-color: #9ca3af;
         }
 
-        .separator {
-            width: 1px;
-            height: 20px;
-            background: #d1d5db;
-            margin: 0 10px;
+        .quick-actions-label {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-right: 5px;
         }
 
         .main-content {
@@ -182,7 +125,7 @@
         }
 
         .clear-btn,
-        .sort-btn {
+        .toggle-view-btn {
             padding: 8px 16px;
             color: white;
             border: none;
@@ -200,11 +143,11 @@
             background: #dc2626;
         }
 
-        .sort-btn {
+        .toggle-view-btn {
             background: #8b5cf6;
         }
 
-        .sort-btn:hover {
+        .toggle-view-btn:hover {
             background: #7c3aed;
         }
 
@@ -376,6 +319,50 @@
         .btn-success:hover:not(:disabled) {
             background: #059669;
             transform: translateY(-1px);
+        }
+
+        /* File upload in bottom right */
+        .file-upload-group {
+            margin-left: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-label {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .file-label:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        .file-info-small {
+            font-size: 10px;
+            color: #999;
+            text-align: right;
         }
 
         /* Modal Styles */
@@ -767,29 +754,17 @@
                     <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor">
                         <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
                     </svg>
-                    GitHub
+                    Code 
                 </a>
             </div>
             <p style="font-size: 16px; margin-bottom: 8px;">Browse and select variables -> automatically generate merge scripts for Stata, R, or Python.</p>
             <p style="font-size: 12px; opacity: 0.8;">⚠️ Work in progress. BCS70 only for now ... future versions may support other studies (MCS, NCDS, Understanding Society, etc.).</p>
         </div>
 
-        <div class="upload-section">
-            <div class="file-input-wrapper">
-                <input type="file" id="csvFile" accept=".csv" class="file-input">
-                <label for="csvFile" class="file-label">📁 Choose lookup.csv</label>
-            </div>
-            <span class="file-info" id="fileInfo">No file selected (drag & drop anywhere)</span>
-            <div class="progress-bar" id="progressBar">
-                <div class="progress-bar-fill" id="progressFill"></div>
-            </div>
-        </div>
-
         <div class="quick-actions" id="quickActions">
-            <button class="quick-btn" onclick="selectAllVisible()">Select All Visible</button>
-            <button class="quick-btn" onclick="deselectAll()">Deselect All</button>
-            <div class="separator"></div>
-            <button class="quick-btn" onclick="toggleCompactView()">🔄 Toggle View</button>
+            <span class="quick-actions-label">Quick select:</span>
+            <button class="quick-btn" onclick="selectAllVisible()">All Visible</button>
+            <button class="quick-btn" onclick="deselectAll()">Clear All</button>
         </div>
 
         <div class="filter-section" id="filterSection" style="display: none;">
@@ -854,10 +829,8 @@
                 <div class="selection-header">
                     <div class="selection-count">Selected Variables: <span id="selectedCount">0</span></div>
                     <div class="selection-actions">
-                        <button class="sort-btn" id="sortBtn" onclick="sortSelection()"
-                            style="display: none;">A→Z</button>
-                        <button class="clear-btn" id="clearBtn" onclick="clearSelection()" style="display: none;">Clear
-                            All</button>
+                        <button class="toggle-view-btn" id="toggleViewBtn" onclick="toggleCompactView()" style="display: none;">🔄 Compact</button>
+                        <button class="clear-btn" id="clearBtn" onclick="clearSelection()" style="display: none;">Clear All</button>
                     </div>
                 </div>
                 <div id="selectedList"></div>
@@ -883,6 +856,15 @@
             <button class="btn btn-secondary" id="generatePythonBtn" disabled>
                 <span>Generate Python Code</span>
             </button>
+            
+            <!-- File upload moved to bottom right -->
+            <div class="file-upload-group">
+                <div class="file-input-wrapper">
+                    <input type="file" id="csvFile" accept=".csv" class="file-input">
+                    <label for="csvFile" class="file-label">📁 Choose lookup.csv</label>
+                </div>
+                <span class="file-info-small" id="fileInfo">or drag & drop anywhere</span>
+            </div>
         </div>
     </div>
 
@@ -939,7 +921,6 @@
             let lookupData = [];
             let selectedVariables = new Map();
             let dataTable = null;
-            let currentSortOrder = 'source'; // 'source', 'alpha', 'selection'
             let compactView = false;
 
             // Configuration
@@ -956,8 +937,6 @@
                 fileInfo: $id('fileInfo'),
                 filterSection: $id('filterSection'),
                 quickActions: $id('quickActions'),
-                progressBar: $id('progressBar'),
-                progressFill: $id('progressFill'),
                 varSearch: $id('varSearch'),
                 labelSearch: $id('labelSearch'),
                 waveFilter: $id('waveFilter'),
@@ -968,7 +947,7 @@
                 selectedCount: $id('selectedCount'),
                 statsSelectedCount: $id('statsSelectedCount'),
                 clearBtn: $id('clearBtn'),
-                sortBtn: $id('sortBtn'),
+                toggleViewBtn: $id('toggleViewBtn'),
                 idVarInput: $id('idVarInput'),
                 basePathInput: $id('basePathInput'),
                 generateRBtn: $id('generateRBtn'),
@@ -991,7 +970,7 @@
 
             function fetchData(url) {
                 console.log('[DEBUG] Fetching data from:', url);
-                elements.fileInfo.textContent = 'Loading default data...';
+                elements.fileInfo.textContent = 'Loading...';
                 elements.loadingOverlay.style.display = 'flex';
 
                 Papa.parse(url, {
@@ -1001,12 +980,12 @@
                     complete: function (results) {
                         console.log('[DEBUG] Fetch complete. Rows:', results.data.length);
                         processData(results.data);
-                        elements.fileInfo.textContent = 'Loaded default dataset';
+                        elements.fileInfo.textContent = 'Default data loaded';
                     },
                     error: function (error) {
                         console.log('[DEBUG] Fetch error:', error);
                         elements.loadingOverlay.style.display = 'none';
-                        elements.fileInfo.textContent = 'Default data not found (upload file manually)';
+                        elements.fileInfo.textContent = 'or drag & drop anywhere';
                         // Don't alert, just let user upload manually
                     }
                 });
@@ -1124,7 +1103,6 @@
                 }
 
                 elements.fileInfo.textContent = `Loading ${file.name}...`;
-                elements.progressBar.style.display = 'block';
                 elements.loadingOverlay.style.display = 'flex';
 
                 // Parse CSV with Papa Parse
@@ -1135,13 +1113,11 @@
                     complete: function (results) {
                         console.log('[DEBUG] Parse complete');
                         processData(results.data);
-                        elements.progressBar.style.display = 'none';
-                        elements.fileInfo.textContent = `${file.name} (${lookupData.length.toLocaleString()} variables)`;
+                        elements.fileInfo.textContent = `${file.name} loaded`;
                     },
                     error: function (error) {
                         console.log('[DEBUG] Papa.parse error:', error);
                         elements.loadingOverlay.style.display = 'none';
-                        elements.progressBar.style.display = 'none';
                         alert(`Error parsing CSV: ${error.message}`);
                         elements.fileInfo.textContent = 'Failed to load file';
                     }
@@ -1253,8 +1229,7 @@
                         pageLength: 50,
                         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                         select: {
-                            style: 'multi+shift',
-                            selector: 'td:first-child'
+                            style: 'multi+shift'
                         },
                         order: [[2, 'asc'], [3, 'asc'], [0, 'asc']],
                         dom: 'rtilp',
@@ -1393,7 +1368,7 @@
                 elements.selectedCount.textContent = count;
                 elements.statsSelectedCount.textContent = count;
                 elements.clearBtn.style.display = count > 0 ? 'inline-block' : 'none';
-                elements.sortBtn.style.display = count > 0 ? 'inline-block' : 'none';
+                elements.toggleViewBtn.style.display = count > 0 ? 'inline-block' : 'none';
             }
 
             function updateStats() {
@@ -1431,6 +1406,8 @@
 
             window.toggleCompactView = function () {
                 compactView = !compactView;
+                elements.toggleViewBtn.textContent = compactView ? '🔄 Detailed' : '🔄 Compact';
+                
                 const items = elements.selectedList.querySelectorAll('.selected-item');
                 items.forEach(item => {
                     const data = selectedVariables.get(item.dataset.key);
@@ -1454,34 +1431,6 @@
                         }
                     }
                 });
-            };
-
-            window.sortSelection = function () {
-                const items = Array.from(elements.selectedList.children);
-                let sorted;
-
-                switch (currentSortOrder) {
-                    case 'source':
-                        sorted = items.sort((a, b) =>
-                            a.dataset.variable.localeCompare(b.dataset.variable));
-                        currentSortOrder = 'alpha';
-                        elements.sortBtn.textContent = 'Z→A';
-                        break;
-                    case 'alpha':
-                        sorted = items.sort((a, b) =>
-                            b.dataset.variable.localeCompare(a.dataset.variable));
-                        currentSortOrder = 'reverse';
-                        elements.sortBtn.textContent = 'Original';
-                        break;
-                    default:
-                        sorted = items.sort((a, b) =>
-                            a.dataset.key.localeCompare(b.dataset.key));
-                        currentSortOrder = 'source';
-                        elements.sortBtn.textContent = 'A→Z';
-                }
-
-                elements.selectedList.innerHTML = '';
-                sorted.forEach(item => elements.selectedList.appendChild(item));
             };
 
             // Code Generation
@@ -1529,7 +1478,6 @@
 
             function generateRCode(groups, idVar, basePath) {
                 const date = new Date().toISOString().split('T')[0];
-                // Remove all conversion to lowercase for idVar
                 return `# Survey Variable Selection - R Code
 # Generated: ${date}
 # Variables: ${selectedVariables.size} from ${groups.length} datasets
@@ -1569,7 +1517,6 @@ look_for(final_data)
 
             function generateStataCode(groups, idVar, basePath) {
                 const date = new Date().toISOString().split('T')[0];
-                // Remove all conversion to lowercase for idVar
                 let code = `* Survey Variable Selection - Stata Code
 * Generated: ${date}
 * Variables: ${selectedVariables.size} from ${groups.length} datasets
@@ -1589,13 +1536,8 @@ global base_path "${basePath}"
                         code += `keep ${idVar} ${g.variables.join(' ')}\n\n`;
                     } else {
                         code += `* Merge ${g.data}\n`;
-                        code += `preserve\n`;
-                        code += `use "\$base_path/${g.folder}/${g.data}", clear\n`;
-                        code += `keep ${idVar} ${g.variables.join(' ')}\n`;
-                        code += `tempfile temp${i}\n`;
-                        code += `save \`temp${i}'\n`;
-                        code += `restore\n`;
-                        code += `merge 1:1 ${idVar} using \`temp${i}'\n`;
+                        code += `merge 1:1 ${idVar} using "\$base_path/${g.folder}/${g.data}", ///\n`;
+                        code += `    keepusing(${g.variables.join(' ')})\n`;
                         code += `drop _merge\n\n`;
                     }
                 });
@@ -1654,7 +1596,6 @@ print(final_data.info())
 
             function showCode(code, language) {
                 $id('modalTitle').textContent = `Generated ${language} Code`;
-                // Preserve the badge element while safely inserting code
                 $id('codeOutput').innerHTML =
                     `<span class="code-lang-badge" id="codeLang">${language}</span>` +
                     escapeHtml(code);
@@ -1696,103 +1637,6 @@ print(final_data.info())
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-            }
-
-            // Presets
-            window.showPresets = function () {
-                const presets = loadPresets();
-                const list = $id('presetList');
-                list.innerHTML = '';
-
-                // Add default presets
-                const defaults = [
-                    {
-                        name: 'Demographics', desc: 'Age, sex, ethnicity, education',
-                        patterns: ['age', 'sex', 'gender', 'ethnic', 'educ', 'race']
-                    },
-                    {
-                        name: 'Health', desc: 'Physical and mental health variables',
-                        patterns: ['health', 'illness', 'disease', 'mental', 'depress', 'anxiety']
-                    },
-                    {
-                        name: 'Socioeconomic', desc: 'Income, employment, social class',
-                        patterns: ['income', 'employ', 'job', 'work', 'class', 'ses']
-                    }
-                ];
-
-                [...defaults, ...presets].forEach(preset => {
-                    const item = document.createElement('div');
-                    item.className = 'preset-item';
-                    item.innerHTML = `
-                        <div class="preset-name">${escapeHtml(preset.name)}</div>
-                        <div class="preset-desc">${escapeHtml(preset.desc || `${preset.variables?.length || 0} variables`)}</div>
-                    `;
-                    item.onclick = () => loadPreset(preset);
-                    list.appendChild(item);
-                });
-
-                elements.presetModal.style.display = 'block';
-            };
-
-            window.closePresetModal = function () {
-                elements.presetModal.style.display = 'none';
-            };
-
-            function loadPreset(preset) {
-                if (preset.patterns) {
-                    // Apply patterns (pipe-separated simple search)
-                    const pattern = preset.patterns.join('|');
-                    elements.varSearch.value = pattern;
-                    if (dataTable) dataTable.draw();
-                } else if (preset.variables) {
-                    // Load specific variables
-                    preset.variables.forEach(v => {
-                        const data = lookupData.find(d =>
-                            d.variable === v.variable &&
-                            d.folder === v.folder &&
-                            d.data === v.data
-                        );
-                        if (data) {
-                            const key = `${data.folder}|${data.data}|${data.variable}`;
-                            if (!selectedVariables.has(key)) {
-                                selectedVariables.set(key, data);
-                                addToSelectedList(data);
-                            }
-                        }
-                    });
-                    updateSelectedCount();
-                }
-                closePresetModal();
-            }
-
-            window.savePreset = function () {
-                if (selectedVariables.size === 0) {
-                    alert('No variables selected');
-                    return;
-                }
-
-                const name = prompt('Enter preset name:');
-                if (!name) return;
-
-                const preset = {
-                    name: name,
-                    date: new Date().toISOString(),
-                    variables: Array.from(selectedVariables.values())
-                };
-
-                const presets = loadPresets();
-                presets.push(preset);
-                localStorage.setItem(CONFIG.presetStorageKey, JSON.stringify(presets));
-
-                alert(`Saved preset "${name}" with ${selectedVariables.size} variables`);
-            };
-
-            function loadPresets() {
-                try {
-                    return JSON.parse(localStorage.getItem(CONFIG.presetStorageKey) || '[]');
-                } catch {
-                    return [];
-                }
             }
 
             function checkURLParams() {
